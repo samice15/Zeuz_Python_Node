@@ -6654,3 +6654,93 @@ def text_to_speech(data_set):
         return "passed"
     except:
         return CommonUtil.Exception_Handler(sys.exc_info())
+    
+@logger
+def sort_and_binary_search_action_with_value(data_set):
+    """
+    Sort the array and perform a binary search to find the target number, returning its index and value.
+    
+    Args:
+        data_set:
+          array              | element parameter  | unsorted list of numbers to search
+          target             | element parameter  | the value to find
+          save into variable | common action      | variable_name
+    
+    Returns:
+        "passed" if success, "zeuz_failed" otherwise.
+    """
+    
+    sModuleInfo = inspect.currentframe().f_code.co_name + " : " + MODULE_NAME
+
+    try:
+        # Initialize variables
+        arr = []
+        target = None
+        variable_name = None
+        result_data = {}  # Dictionary to store index and value
+
+        try:
+            # Parse input data_set
+            for left, mid, right in data_set:
+                left = left.strip().lower()
+                if "array" in left:
+                    arr = CommonUtil.parse_value_into_object(right)  # Convert string to Python object
+                elif "target" in left:
+                    target = CommonUtil.parse_value_into_object(right)
+                elif "action" in mid:
+                    variable_name = right.strip()
+        except:
+            CommonUtil.ExecLog(sModuleInfo, "Failed to parse data.", 3)
+            traceback.print_exc()
+            return "zeuz_failed"
+
+        # Ensure input data is valid
+        if not isinstance(arr, list) or target is None:
+            CommonUtil.ExecLog(sModuleInfo, "Invalid input data: array must be a list and target must be defined.", 3)
+            return "zeuz_failed"
+
+        # Sort the array
+        sorted_array = sorted(arr)
+
+        # Perform Binary Search
+        left = 0
+        right = len(sorted_array) - 1
+        index = -1  # Default return if not found
+        selected_value = None
+
+        try:
+            while left <= right:
+                mid = (left + right) // 2
+
+                if sorted_array[mid] == target:
+                    index = mid
+                    selected_value = sorted_array[mid]  # Store the found value
+                    break
+                elif sorted_array[mid] < target:
+                    left = mid + 1
+                else:
+                    right = mid - 1
+        except:
+            CommonUtil.ExecLog(sModuleInfo, "Error during binary search execution.", 3)
+            traceback.print_exc()
+            return "zeuz_failed"
+
+        # Store index and value in the result data
+        result_data["index"] = index
+        result_data["value"] = selected_value if index != -1 else None
+
+        # Save result (both index and value) into shared variable
+        sr.Set_Shared_Variables(variable_name, result_data, print_variable=True)
+        CommonUtil.prettify(variable_name, result_data)
+
+        # Log sorted array and selected number and index
+        CommonUtil.ExecLog(sModuleInfo, f"Sorted array: {sorted_array}", 1)
+        if index != -1:
+            CommonUtil.ExecLog(sModuleInfo, f"Target {target} found at index: {index}", 1)
+        else:
+            CommonUtil.ExecLog(sModuleInfo, f"Target {target} not found in array.", 1)
+
+        return "passed"
+
+    except:
+        return CommonUtil.Exception_Handler(sys.exc_info())

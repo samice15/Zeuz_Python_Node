@@ -1,10 +1,10 @@
 {
-    "testNo": "TEST-0000",
-    "testName": "Test_name",
-    "stepNo": 0,
-    "stepName": "Step_name",
-    "url": "",
-    "apiKey": "",
+    "testNo": "TEST-10626",
+    "testName": "Sami: ZeuZ > Web > Final Test > HomeLeads Website",
+    "stepNo": 2,
+    "stepName": "Go to the HomeLeads Webpage",
+    "url": "https://qa.automationsolutionz.com",
+    "apiKey": "7b5760c1-6963-4f17-9652-e5ca5e141cb8",
     "jwtKey": "",
-    "nodeId": ""
+    "nodeId": "samiul haque_6deee180-3"
 }
